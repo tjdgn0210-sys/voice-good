@@ -1,0 +1,43 @@
+{
+  "baseline": "Frontend R1 1.1.0",
+  "release": "Fullstack R1 1.2.0",
+  "changed": [
+    "voice-life-manager/.gitignore",
+    "voice-life-manager/AGENTS.md",
+    "voice-life-manager/README.md",
+    "voice-life-manager/app.json",
+    "voice-life-manager/package.json",
+    "voice-life-manager/scripts/verify-text-expense-parser.cjs",
+    "voice-life-manager/src/app/_layout.tsx",
+    "voice-life-manager/src/application/capture/voice-expense-capture.ts",
+    "voice-life-manager/src/composition/voice-capture-provider.tsx",
+    "voice-life-manager/src/composition/voice-capture.ts",
+    "voice-life-manager/src/features/capture/capture-composer.tsx"
+  ],
+  "added": [
+    "voice-life-manager/docs/FULLSTACK_R1_VERIFICATION.md",
+    "voice-life-manager/docs/previews/ai-connection-mobile.png",
+    "voice-life-manager/docs/previews/ai-review-mobile.png",
+    "voice-life-manager/scripts/browser-ai-smoke.cjs",
+    "voice-life-manager/scripts/verify-ai-integration.cjs",
+    "voice-life-manager/server/.dockerignore",
+    "voice-life-manager/server/.env.example",
+    "voice-life-manager/server/Dockerfile",
+    "voice-life-manager/server/README.md",
+    "voice-life-manager/server/package.json",
+    "voice-life-manager/server/src/config.mjs",
+    "voice-life-manager/server/src/contracts.mjs",
+    "voice-life-manager/server/src/main.mjs",
+    "voice-life-manager/server/src/provider.mjs",
+    "voice-life-manager/server/src/server.mjs",
+    "voice-life-manager/server/src/store.mjs",
+    "voice-life-manager/server/src/token-cli.mjs",
+    "voice-life-manager/server/test/gateway.test.mjs",
+    "voice-life-manager/src/adapters/ai/http-capture-ai-interpreter.ts",
+    "voice-life-manager/src/app/ai-settings.tsx",
+    "voice-life-manager/src/composition/interpretation-provider.tsx",
+    "voice-life-manager/src/features/capture/interpretation-context.tsx",
+    "voice-life-manager/src/features/settings/ai-connection-context.tsx",
+    "voice-life-manager/src/features/settings/ai-connection-screen.tsx"
+  ]
+}
