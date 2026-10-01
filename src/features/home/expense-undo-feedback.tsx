@@ -53,7 +53,7 @@ export function ExpenseUndoFeedback({ onResult, refreshKey }: { onResult(): void
   }
 
   if (!feedback) return null;
-  return <View style={styles.card}>
+  return <View style={styles.softCard}>
     <Text style={styles.text} accessibilityLiveRegion="polite">
       {feedback.status === 'UNDONE' ? '지출 기록을 취소했습니다.' : feedback.label}
     </Text>

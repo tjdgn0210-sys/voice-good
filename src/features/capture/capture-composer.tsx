@@ -73,7 +73,7 @@ export function CaptureComposer({ onSaved }: { onSaved(): void }) {
     });
   }
   const disabled = working || active || !editor.ready;
-  return <View style={styles.card}>
+  return <View style={styles.softCard}>
     <Text style={styles.eyebrow}>빠른 기록</Text>
     <Text style={styles.heading}>지출을 말하고, 확인하세요.</Text>
     <Text style={styles.muted}>예: “점심 7000원 썼어” · 확인 후 저장합니다.</Text>
@@ -91,7 +91,7 @@ export function CaptureComposer({ onSaved }: { onSaved(): void }) {
     <DraftStatus status={editor.status} onRetry={() => { void editor.retry().catch(() => {}); }} onDiscard={!editor.ready ? () => { void editor.clear().catch(() => {}); } : undefined} />
     <Pressable accessibilityRole="button" disabled={disabled || !editor.draft.fields.text?.trim()} accessibilityState={{ disabled: disabled || !editor.draft.fields.text?.trim(), busy: working }}
       onPress={analyze} style={[styles.secondary, disabled && styles.disabled]}><Text style={styles.secondaryText}>{working ? '입력 처리 중…' : '입력 내용 확인'}</Text></Pressable>
-    {review && <View style={[styles.card, styles.review]}>
+    {review && <View style={[styles.softCard, styles.review]}>
       <Text style={styles.heading}>이 내용으로 기록할까요?</Text>
       <Text style={styles.amount}>{review.payload.amount?.toLocaleString('ko-KR')}원</Text>
       <Text style={styles.text}>{review.payload.category ?? '미분류'} · {review.payload.memo ?? '메모 없음'}</Text>

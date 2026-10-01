@@ -38,7 +38,7 @@ export function HomeScreen() {
       keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
       ListHeaderComponent={<View style={{ gap: 20 }}>
         <View style={styles.field}><Text style={styles.eyebrow}>VOICE LIFE MANAGER</Text><Text style={styles.title} accessibilityRole="header">오늘의 지출</Text><Text style={styles.muted}>기록은 이 기기에 보관됩니다.</Text></View>
-        <View style={styles.card}>
+        <View style={styles.softCard}>
           <Text style={styles.muted}>오늘 발생한 원화 지출</Text>
           <Text style={styles.amount}>{error ? '확인 필요' : summary ? `${summary.total.toLocaleString('ko-KR')}원` : '—'}</Text>
           <Text style={styles.muted}>{summary && !error ? `${summary.count}건 · 기기 현지 날짜 기준` : '기록을 확인하고 있습니다.'}</Text>
@@ -49,7 +49,7 @@ export function HomeScreen() {
         {loading && <ActivityIndicator accessibilityLabel="지출 불러오는 중" />}
         {error && <View style={styles.field}><Text accessibilityRole="alert" style={styles.error}>최신 기록을 불러오지 못했습니다.</Text><Pressable accessibilityRole="button" onPress={refresh} style={styles.secondary}><Text style={styles.secondaryText}>다시 불러오기</Text></Pressable></View>}
       </View>}
-      ListEmptyComponent={!loading && !error ? <View style={styles.card}><Text style={styles.heading}>첫 기록을 남겨 보세요.</Text><Text style={styles.muted}>말하거나 직접 입력한 지출을 여기에서 확인할 수 있습니다.</Text></View> : null}
+      ListEmptyComponent={!loading && !error ? <View style={styles.softCard}><Text style={styles.heading}>첫 기록을 남겨 보세요.</Text><Text style={styles.muted}>말하거나 직접 입력한 지출을 여기에서 확인할 수 있습니다.</Text></View> : null}
       ListFooterComponent={items.length >= limit ? <Pressable accessibilityRole="button" disabled={loading} onPress={() => setLimit(value => value + 30)} style={styles.secondary}><Text style={styles.secondaryText}>이전 기록 더 보기</Text></Pressable> : null}
       renderItem={({ item }) => <Pressable accessibilityRole="button" accessibilityLabel={`${item.category ?? '미분류'} ${item.amount.toLocaleString('ko-KR')}원, 상세 보기`}
         onPress={() => router.push({ pathname: '/expense', params: { id: item.id } })} style={({ pressed }) => [styles.record, pressed && styles.pressed]}>

@@ -27,6 +27,7 @@ export const expenseStyles = StyleSheet.create({
   pressed: { opacity: 0.75 },
   error: { color: palette.danger, fontSize: 15, lineHeight: 23 },
   card: { backgroundColor: palette.paper, borderWidth: 1, borderColor: palette.line, borderRadius: 16, padding: 20, gap: 12 },
+  softCard: { backgroundColor: palette.paper, borderWidth: 1, borderColor: '#E6ECF2', borderRadius: 24, padding: 24, gap: 12, boxShadow: '0px 4px 16px rgba(23, 43, 64, 0.06)' },
   review: { backgroundColor: '#EFF5FC', borderColor: '#93B2D1' },
   divider: { height: 1, backgroundColor: palette.line },
   amount: { fontSize: 34, fontWeight: '700', color: palette.ink, fontVariant: ['tabular-nums'] },

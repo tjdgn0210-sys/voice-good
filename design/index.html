@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>홈 화면 디자인</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+  <!-- 디자인 확인용 패널. 앱으로 변환하지 않는다. 평소에는 접어 두고, 펼치면 묶음별로 보여 준다. -->
+  <div class="designBar" id="designBar">
+    <div class="designBarTop">
+      <p class="designBarLabel">디자인 확인용 · 앱으로 변환하지 않음</p>
+      <button class="designButton" id="designToggle" aria-expanded="false"><span class="designButtonText" id="designToggleText">펼치기</span></button>
+    </div>
+    <p class="designBarNote" id="motionNote" hidden>이 컴퓨터의 '동작 줄이기(애니메이션 효과 끄기)' 설정이 켜져 있어 움직임이 멈춰 있습니다. '첫 화면' 묶음의 '동작 줄이기' 버튼을 눌러 끄면 이 미리보기에서만 움직입니다.</p>
+    <div class="designPanel" id="designPanel" hidden>
+      <div class="designGroup">
+        <p class="designGroupLabel">홈 상태</p>
+        <div class="designBarRow">
+          <button class="designButton" data-state="default"><span class="designButtonText">기본</span></button>
+          <button class="designButton" data-state="loading"><span class="designButtonText">로딩</span></button>
+          <button class="designButton" data-state="error"><span class="designButtonText">오류</span></button>
+          <button class="designButton" data-state="empty"><span class="designButtonText">기록 없음</span></button>
+          <button class="designButton" data-state="undo"><span class="designButtonText">실행취소</span></button>
+          <button class="designButton" data-state="review"><span class="designButtonText">확인 카드</span></button>
+          <button class="designButton" data-state="listening"><span class="designButtonText">음성 인식 중</span></button>
+        </div>
+      </div>
+      <div class="designGroup">
+        <p class="designGroupLabel">첫 화면</p>
+        <div class="designBarRow">
+          <button class="designButton" data-state="start"><span class="designButtonText">녹음</span></button>
+          <button class="designButton" data-state="startChecking"><span class="designButtonText">확인 중</span></button>
+          <button class="designButton" data-state="startUnavailable"><span class="designButtonText">사용 불가</span></button>
+          <button class="designButton" data-motion="toggle"><span class="designButtonText">동작 줄이기</span></button>
+        </div>
+      </div>
+      <div class="designGroup">
+        <p class="designGroupLabel">화면 이동 (확인용)</p>
+        <div class="designBarRow">
+          <button class="designButton" data-page="home"><span class="designButtonText">홈</span></button>
+          <button class="designButton" data-page="settings"><span class="designButtonText">설정</span></button>
+          <button class="designButton" data-page="plan"><span class="designButtonText">요금제</span></button>
+          <button class="designButton" data-page="people"><span class="designButtonText">가족·친구</span></button>
+        </div>
+        <div class="designBarRow">
+          <button class="designButton" data-layer="add"><span class="designButtonText">추가 시트</span></button>
+          <button class="designButton" data-layer="invite"><span class="designButtonText">링크로 열림</span></button>
+          <button class="designButton" data-layer="person"><span class="designButtonText">사람 설정</span></button>
+          <button class="designButton" data-layer="send"><span class="designButtonText">일정 보내기</span></button>
+        </div>
+      </div>
+      <div class="designGroup">
+        <p class="designGroupLabel">계정 상태 (무제한 가격은 예시)</p>
+        <div class="designBarRow">
+          <button class="designButton" data-account="free"><span class="designButtonText">무료 1/3</span></button>
+          <button class="designButton" data-account="freeOut"><span class="designButtonText">무료 소진</span></button>
+          <button class="designButton" data-account="monthly"><span class="designButtonText">구독 118/300</span></button>
+          <button class="designButton" data-account="monthlyOut"><span class="designButtonText">구독 소진</span></button>
+          <button class="designButton" data-account="unlimited"><span class="designButtonText">무제한</span></button>
+        </div>
+      </div>
+      <div class="designGroup">
+        <p class="designGroupLabel">말하면 캐릭터가 대신 적어요</p>
+        <div class="designBarRow">
+          <button class="designButton" data-scenario="clear"><span class="designButtonText">지출 (분명)</span></button>
+          <button class="designButton" data-scenario="confirm"><span class="designButtonText">지출 (애매)</span></button>
+          <button class="designButton" data-scenario="event"><span class="designButtonText">약속 일정</span></button>
+          <button class="designButton" data-scenario="task"><span class="designButtonText">해야 할 일</span></button>
+          <button class="designButton" data-scenario="time"><span class="designButtonText">시간 애매</span></button>
+          <button class="designButton" data-scenario="done"><span class="designButtonText">할 일 완료</span></button>
+          <button class="designButton" data-scenario="reset"><span class="designButtonText">처음으로</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 확인용 패널이 스크롤로 화면 밖에 나가면 나타나는 버튼. 앱으로 변환하지 않는다. -->
+  <button class="designTop" id="designTop" hidden><span class="designTopText">확인용 패널로 ↑</span></button>
+
+  <!-- 앱 상단 헤더: src/app/_layout.tsx 의 Stack 제목 + 설정 버튼 하나 (글씨 크기·색은 설정 안으로 모았다) -->
+  <div class="header">
+    <button class="backButton" id="backButton" aria-label="뒤로" hidden><span class="backText">‹ 뒤로</span></button>
+    <h1 class="headerTitle" id="headerTitle">Voice Life Manager</h1>
+    <button class="settingsButton" id="settingsOpen" aria-label="설정"><span class="settingsText">설정</span></button>
+  </div>
+
+  <div class="screen" id="homeScreen">
+    <div class="content">
+
+      <div class="listHeader">
+
+        <!-- 1. 머리말: 작은 영문 라벨 + 큰 세리프 제목 -->
+        <div class="intro">
+          <p class="eyebrow">VOICE LIFE MANAGER</p>
+          <h1 class="title">오늘의 지출</h1>
+          <p class="muted">기록은 이 기기에 보관됩니다.</p>
+        </div>
+
+        <!-- 2. 오늘 합계: 색 면 위에 큰 숫자 (화면의 중심) -->
+        <div class="hero">
+          <p class="heroLabel">오늘 발생한 원화 지출</p>
+          <p class="heroAmount"><span class="heroNumber" id="summaryNumber">—</span><span class="heroUnit" id="summaryUnit"></span></p>
+          <p class="heroCaption" id="summaryCaption">기록을 확인하고 있습니다.</p>
+        </div>
+
+        <!-- 실행취소 카드: expense-undo-feedback.tsx -->
+        <div class="card" id="undoCard" hidden>
+          <p class="text" id="undoLabel">식비 8,000원 저장됨</p>
+          <p class="muted">저장 후 60초 동안 실행취소할 수 있습니다. 앱을 다시 시작하면 사용할 수 없습니다.</p>
+          <button class="secondary"><span class="secondaryText">실행취소</span></button>
+        </div>
+
+        <!-- 3. 빠른 기록: capture-composer.tsx -->
+        <div class="card">
+          <p class="eyebrow">빠른 기록</p>
+          <p class="heading">지출을 말하고, 확인하세요.</p>
+          <p class="muted">예: “점심 7000원 썼어” · 확인 후 저장합니다.</p>
+          <button class="button voiceButton"><span class="buttonText" id="voiceButtonText">말하기 시작</span></button>
+          <!-- 남은 AI 해석 횟수. 다 쓰면 안내 + 요금제 링크. 무제한이면 숨김 -->
+          <div class="usageBox" id="usageBox">
+            <p class="muted" id="usageLine"></p>
+            <button class="linkButton" id="usageLink" hidden><span class="linkText">요금제 보기</span></button>
+          </div>
+          <button class="secondary" id="voiceCancel" hidden><span class="secondaryText">음성 입력 취소</span></button>
+          <p class="text" id="partialText" hidden>점심 칠천 원</p>
+          <p class="fieldLabel">문장으로 입력</p>
+          <input class="input" id="captureInput" placeholder="점심 7000원 썼어" maxlength="1000" aria-label="지출 문장 입력">
+          <!-- draft-status.tsx -->
+          <div class="field" id="draftStatus" hidden>
+            <p class="muted">이 기기에 초안이 저장되어 있습니다.</p>
+          </div>
+          <button class="secondary" id="analyzeButton"><span class="secondaryText">입력 내용 확인</span></button>
+
+          <!-- 확인 카드: 카드 안에서 색 면만 달라지는 안쪽 면 -->
+          <div class="card review" id="reviewCard" hidden>
+            <p class="heading">이 내용으로 기록할까요?</p>
+            <p class="amount" id="reviewAmount">7,000원</p>
+            <p class="text" id="reviewDetail">식비 · 점심</p>
+            <p class="muted" id="reviewDate">—</p>
+            <button class="button"><span class="buttonText">이 내용으로 저장</span></button>
+            <p class="muted">금액이나 분류가 다르면 문장을 수정하거나 직접 입력하세요.</p>
+          </div>
+
+          <!-- 보조 동작은 가는 선 아래 글자 링크로 낮춘다 -->
+          <div class="divider"></div>
+          <div class="row linkRow">
+            <button class="linkButton" id="manualButton"><span class="linkText">직접 입력</span></button>
+            <button class="linkButton"><span class="linkText">AI 연결 설정</span></button>
+            <button class="linkButton" id="discardButton" hidden><span class="linkText">초안 비우기</span></button>
+          </div>
+        </div>
+
+        <!-- 캘린더: 일/주/월 보기. 말하면 캐릭터가 약속(Event)과 할 일(Task)을 대신 적어 준다.
+             항목을 누르면 수정·삭제, 할 일의 동그라미를 누르면 완료 체크. -->
+        <div class="card" id="calendarCard">
+          <div class="rowBetween">
+            <h2 class="sectionTitle">캘린더</h2>
+            <div class="row linkRow">
+              <button class="linkButton" id="todayButton" hidden><span class="linkText">오늘</span></button>
+              <button class="linkButton" id="sendButton"><span class="linkText">일정 보내기</span></button>
+              <button class="linkButton" id="addButton"><span class="linkText">추가</span></button>
+            </div>
+          </div>
+          <div class="segment" id="viewSegment" role="group" aria-label="보기 방식">
+            <button class="segmentButton" data-view="day" aria-pressed="false"><span class="segmentText">일</span></button>
+            <button class="segmentButton" data-view="week" aria-pressed="true"><span class="segmentText">주</span></button>
+            <button class="segmentButton" data-view="month" aria-pressed="false"><span class="segmentText">월</span></button>
+          </div>
+          <div class="calNav">
+            <button class="navButton" id="calPrev" aria-label="이전"><span class="navText">‹</span></button>
+            <p class="calLabel" id="calLabel">10월</p>
+            <button class="navButton" id="calNext" aria-label="다음"><span class="navText">›</span></button>
+          </div>
+          <div class="calGrid" id="calGrid"></div>
+          <p class="agendaDate" id="agendaDate" hidden>10월 1일 목요일</p>
+          <div class="divider"></div>
+          <div class="agenda" id="agenda"></div>
+        </div>
+
+        <!-- 4. 최근 기록 -->
+        <div class="recentHeader">
+          <h2 class="sectionTitle">최근 기록</h2>
+          <p class="muted">기록을 누르면 상세 확인과 수정이 가능합니다.</p>
+        </div>
+
+        <div class="spinnerBox" id="loadingIndicator" hidden aria-label="지출 불러오는 중">
+          <div class="spinner"></div>
+        </div>
+
+        <div class="field" id="errorBox" hidden>
+          <p class="error" role="alert">최신 기록을 불러오지 못했습니다.</p>
+          <button class="secondary"><span class="secondaryText">다시 불러오기</span></button>
+        </div>
+      </div>
+
+      <div class="card" id="emptyCard" hidden>
+        <p class="heading">첫 기록을 남겨 보세요.</p>
+        <p class="muted">말하거나 직접 입력한 지출을 여기에서 확인할 수 있습니다.</p>
+      </div>
+
+      <!-- FlatList 항목들이 script.js 에서 이 자리에 그려진다 -->
+      <div class="list" id="recordList"></div>
+
+    </div>
+  </div>
+
+  <!-- 앱 첫 화면: 홈 위에 덮이는 반투명 녹음 오버레이. 앱에서는 Modal 로 옮긴다.
+       배경과 버튼만 있고, 캐릭터(#pet)는 오버레이 밖에 따로 있어서 오버레이가 사라진 뒤에도 남아 움직인다. -->
+  <div class="overlay" id="startOverlay" role="dialog" aria-modal="true" aria-label="녹음 중" hidden>
+    <div class="overlayBody">
+      <!-- 캐릭터가 앉는 자리. 동심원만 오버레이에 속한다. -->
+      <div class="mascotStage" id="petStage">
+        <div class="ring ringOuter" data-anim="listen"></div>
+        <div class="ring ringInner" data-anim="listen"></div>
+      </div>
+
+      <div class="chip">
+        <div class="chipDot" id="chipDot" data-anim="listen"></div>
+        <p class="chipText" id="overlayChip">녹음 중</p>
+      </div>
+
+      <!-- 사용 불가일 때만 이유를 한 줄 보여 준다 -->
+      <p class="overlayPhrase" id="overlayPhrase" aria-live="polite" hidden></p>
+
+      <button class="button overlayButton" id="overlayButton"><span class="buttonText" id="overlayButtonText">녹음 그만하고 화면으로 가기</span></button>
+    </div>
+  </div>
+
+  <!-- 캐릭터: 검은 몸 + 크고 살짝 길쭉한 흰 눈. 입과 볼터치는 없다.
+       몸은 가로가 세로보다 조금 긴 통통한 타원이 기본이고, 젤리/물방울처럼 납작한 타원과 길쭉한 타원을 오가며 통통 튄다.
+       앞면(얼굴)과 뒷면(꼬리, 연필)이 있어 뒤돌 수 있다. 위치·크기는 script.js 가 정한다.
+       말로 시킨 일(적기, 완료 체크)은 항상 이 캐릭터가 사람을 대신해서 한다. -->
+  <div class="pet" id="pet" hidden aria-hidden="true">
+    <div class="petBob" id="petBob">
+      <div class="petJelly jellyBounce" id="petJelly" data-anim="listen">
+        <div class="petTilt" id="petTilt" data-anim="always">
+          <div class="petTurn" id="petTurn">
+            <div class="petSide">
+              <div class="petBody">
+                <div class="petShape"></div>
+                <div class="eye eyeLeft" data-eye data-anim="always"></div>
+                <div class="eye eyeRight" data-eye data-anim="always"></div>
+              </div>
+            </div>
+            <div class="petSide petBackSide">
+              <div class="petBody">
+                <div class="petShape"></div>
+                <div class="tail"></div>
+              </div>
+              <div class="arm" id="petArm" data-anim="always">
+                <div class="pencil" id="pencil" hidden><div class="pencilTip"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 확인 말풍선: 애매한 명령일 때 캐릭터 옆에 뜬다 -->
+  <div class="bubble" id="bubble" role="alertdialog" aria-label="확인" hidden>
+    <p class="bubbleText" id="bubbleText">점심 7,000원, 맞나요?</p>
+    <div class="bubbleRow">
+      <button class="bubbleYes" id="bubbleYes"><span class="bubbleYesText" id="bubbleYesText">맞아요</span></button>
+      <button class="bubbleNo" id="bubbleNo"><span class="bubbleNoText" id="bubbleNoText">아니에요</span></button>
+    </div>
+    <div class="bubbleTail" id="bubbleTail"></div>
+  </div>
+
+  <!-- 화면 설정 시트: 글씨 크기와 색을 한곳에 모았다. 앱에서는 Modal 하단 시트. -->
+  <div class="sheetBackdrop" id="settingsBackdrop" hidden></div>
+  <div class="sheet" id="settingsSheet" role="dialog" aria-modal="true" aria-label="화면 설정" hidden>
+    <div class="sheetHead">
+      <h2 class="sheetTitle">화면 설정</h2>
+      <button class="sheetClose" id="settingsClose" aria-label="닫기"><span class="sheetCloseText">닫기</span></button>
+    </div>
+    <div class="sheetBlock">
+      <p class="fieldLabel">글씨 크기</p>
+      <div class="sizeControl" role="group" aria-label="글씨 크기">
+        <button class="sizeButton" data-size="0.9" aria-label="글씨 작게" aria-pressed="false"><span class="sizeText sizeSmall">가</span></button>
+        <button class="sizeButton" data-size="1" aria-label="글씨 보통" aria-pressed="true"><span class="sizeText sizeMedium">가</span></button>
+        <button class="sizeButton" data-size="1.2" aria-label="글씨 크게" aria-pressed="false"><span class="sizeText sizeLarge">가</span></button>
+      </div>
+    </div>
+    <div class="sheetBlock">
+      <p class="fieldLabel">포인트 색</p>
+      <div class="swatchRow" id="accentSwatches"></div>
+    </div>
+    <div class="sheetBlock">
+      <p class="fieldLabel">바탕색</p>
+      <div class="swatchRow" id="baseSwatches"></div>
+    </div>
+    <button class="linkButton" id="colorReset"><span class="linkText">기본 색으로 되돌리기</span></button>
+  </div>
+
+  <!-- 일정·할 일 편집 시트: 항목을 누르면 수정·삭제, "추가"를 누르면 새로 만들기 -->
+  <div class="sheetBackdrop" id="editBackdrop" hidden></div>
+  <div class="sheet" id="editSheet" role="dialog" aria-modal="true" aria-label="일정 편집" hidden>
+    <div class="sheetHead">
+      <h2 class="sheetTitle" id="editHeading">일정 수정</h2>
+      <button class="sheetClose" id="editClose" aria-label="닫기"><span class="sheetCloseText">닫기</span></button>
+    </div>
+    <div class="segment" id="typeSegment" role="group" aria-label="종류" hidden>
+      <button class="segmentButton" data-type="EVENT" aria-pressed="true"><span class="segmentText">약속</span></button>
+      <button class="segmentButton" data-type="TASK" aria-pressed="false"><span class="segmentText">할 일</span></button>
+    </div>
+    <div class="field">
+      <p class="fieldLabel">제목</p>
+      <input class="input" id="editTitle" maxlength="100" placeholder="치과 예약" aria-label="제목">
+    </div>
+    <div class="row editRow">
+      <div class="field fieldGrow">
+        <p class="fieldLabel" id="editDateLabel">날짜</p>
+        <input class="input" id="editDate" maxlength="10" placeholder="2026-10-02" aria-label="날짜">
+      </div>
+      <div class="field fieldGrow" id="editTimeField">
+        <p class="fieldLabel">시간</p>
+        <input class="input" id="editTime" maxlength="5" placeholder="15:00" aria-label="시간">
+      </div>
+    </div>
+    <p class="error" id="editError" role="alert" hidden></p>
+    <button class="button" id="editSave"><span class="buttonText">저장</span></button>
+    <button class="linkButton" id="editDelete"><span class="dangerLinkText">삭제</span></button>
+  </div>
+
+  <!-- ======================================================================
+       서브 화면 3개 (설정 · 요금제 · 가족·친구). 앱에서는 각각 Expo Router 화면.
+       한 번에 하나만 보이며, 홈(#homeScreen)이 보일 때는 모두 숨는다.
+       ====================================================================== -->
+
+  <!-- 설정 -->
+  <div class="screen" id="settingsPage" hidden>
+    <div class="content">
+      <div class="intro">
+        <p class="eyebrow">SETTINGS</p>
+        <h1 class="title">설정</h1>
+      </div>
+
+      <!-- 남은 AI 해석 횟수: 무료는 체험 3회(평생), 구독은 월 한도, 무제한은 한도 없음 -->
+      <div class="hero">
+        <p class="heroLabel" id="usageLabel">이번 달 AI 해석</p>
+        <p class="heroAmount"><span class="heroNumber" id="usageNumber">—</span><span class="heroUnit" id="usageUnit"></span></p>
+        <div class="meter" id="usageMeter"><div class="meterFill" id="meterFill"></div><div class="meterRest" id="meterRest"></div></div>
+        <p class="heroCaption" id="usageCaption"></p>
+        <button class="heroLink" id="usagePlanLink"><span class="heroLinkText">요금제 보기</span></button>
+      </div>
+
+      <div class="group">
+        <p class="groupLabel">계정</p>
+        <div class="panel">
+          <button class="settingRow" id="rowPlan">
+            <div class="settingMain"><p class="settingTitle">요금제</p><p class="settingHint">AI 해석 횟수와 가족·친구 기능</p></div>
+            <p class="settingValue" id="planValue">무료</p><p class="chevron">›</p>
+          </button>
+          <button class="settingRow settingRowLast" id="rowPeople">
+            <div class="settingMain"><p class="settingTitle">가족·친구</p><p class="settingHint">일정을 서로 보내고 받아요</p></div>
+            <p class="settingValue" id="peopleValue">구독 전용</p><p class="chevron">›</p>
+          </button>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="groupLabel">알림</p>
+        <div class="panel">
+          <button class="settingRow" id="rowRemind" role="switch" aria-checked="true">
+            <div class="settingMain"><p class="settingTitle">일정 알림 받기</p><p class="settingHint">알림 권한이 꺼져 있으면 알림이 울리지 않아요.</p></div>
+            <div class="toggle toggleOn" id="remindToggle"><div class="toggleKnob"></div></div>
+          </button>
+          <div class="panelBlock" id="ownReminderBlock">
+            <p class="settingTitle">내 일정 기본 알림</p>
+            <p class="settingHint">새 일정을 만들면 이 시각에 알려 드려요. 일정마다 바꿀 수 있어요.</p>
+            <div class="pillRow" id="ownReminderPills"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="groupLabel">화면 · 연결</p>
+        <div class="panel">
+          <button class="settingRow" id="rowDisplay">
+            <div class="settingMain"><p class="settingTitle">화면 설정</p><p class="settingHint">글씨 크기와 색</p></div>
+            <p class="chevron">›</p>
+          </button>
+          <button class="settingRow settingRowLast" id="rowAi">
+            <div class="settingMain"><p class="settingTitle">AI 연결 설정</p><p class="settingHint">문장과 음성을 해석할 서버에 연결해요</p></div>
+            <p class="settingValue">연결 안 됨</p><p class="chevron">›</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 요금제 -->
+  <div class="screen" id="planPage" hidden>
+    <div class="content">
+      <div class="intro">
+        <p class="eyebrow">PLAN</p>
+        <h1 class="title">요금제</h1>
+        <p class="muted">AI 해석 횟수만 달라져요. 직접 입력은 어떤 요금제에서도 제한이 없어요.</p>
+      </div>
+      <div class="planList" id="planList"></div>
+    </div>
+  </div>
+
+  <!-- 가족·친구 -->
+  <div class="screen" id="peoplePage" hidden>
+    <div class="content">
+      <div class="intro">
+        <p class="eyebrow">FAMILY &amp; FRIENDS</p>
+        <h1 class="title">가족·친구</h1>
+        <p class="muted">일정을 보내면 상대 캘린더에 들어가요. 받는 사람이 수락 방식을 정해요.</p>
+      </div>
+
+      <!-- 무료일 때: 구독 전용 안내 -->
+      <div class="card" id="peopleLocked" hidden>
+        <p class="heading">구독하면 쓸 수 있어요.</p>
+        <p class="muted">부모님 병원 예약처럼 가족에게 일정을 보내 두면 상대 캘린더에 들어가고, 알림 시각도 정해서 보낼 수 있어요.</p>
+        <button class="button" id="peopleToPlan"><span class="buttonText">요금제 보기</span></button>
+      </div>
+
+      <div class="field stack20" id="peopleBody" hidden>
+        <button class="button" id="addPersonOpen"><span class="buttonText">친구·가족 추가</span></button>
+        <div class="field stack12" id="incomingBox"></div>
+        <div class="group" id="peopleGroup">
+          <p class="groupLabel">내 사람들</p>
+          <div class="panel" id="peopleList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       시트 4개 (앱에서는 Modal 하단 시트). 배경은 하나를 같이 쓴다.
+       ====================================================================== -->
+  <div class="sheetBackdrop" id="layerBackdrop" hidden></div>
+
+  <!-- 친구·가족 추가: 코드를 보내거나(내 코드 공유) 받은 코드를 넣는다(코드 입력). 링크로도 추가된다. -->
+  <div class="sheet" id="addSheet" role="dialog" aria-modal="true" aria-label="친구·가족 추가" hidden>
+    <div class="sheetHead">
+      <h2 class="sheetTitle">친구·가족 추가</h2>
+      <button class="sheetClose" data-close-layer aria-label="닫기"><span class="sheetCloseText">닫기</span></button>
+    </div>
+    <div class="segment" role="group" aria-label="추가 방법">
+      <button class="segmentButton" data-addtab="share" aria-pressed="true"><span class="segmentText">내 코드 보내기</span></button>
+      <button class="segmentButton" data-addtab="enter" aria-pressed="false"><span class="segmentText">코드 넣기</span></button>
+    </div>
+
+    <div class="sheetBlock" id="addShare">
+      <p class="muted">내 코드를 알려 주거나 링크를 보내세요. 상대가 입력하거나 링크를 열면 나에게 요청이 와요.</p>
+      <div class="codeBox">
+        <p class="fieldLabel">내 코드</p>
+        <p class="codeText" id="myCode">VLM-7K4Q-92XD</p>
+      </div>
+      <button class="button" id="copyCode"><span class="buttonText" id="copyCodeText">코드 복사</span></button>
+      <button class="secondary" id="shareLink"><span class="secondaryText">초대 링크 공유</span></button>
+      <p class="muted" id="shareLinkNote" hidden>링크를 연 사람에게 내 이름과 친구 요청 화면이 보여요. 상대가 수락하면 연결돼요.</p>
+    </div>
+
+    <div class="sheetBlock" id="addEnter" hidden>
+      <p class="muted">상대에게 받은 코드를 넣으면 이름이 보여요. 맞는지 확인하고 요청을 보내세요.</p>
+      <div class="field">
+        <p class="fieldLabel">친구 코드</p>
+        <input class="input" id="codeInput" maxlength="14" placeholder="VLM-XXXX-XXXX" autocapitalize="characters" aria-label="친구 코드">
+      </div>
+      <p class="error" id="codeError" role="alert" hidden></p>
+      <button class="secondary" id="codeFind"><span class="secondaryText">찾기</span></button>
+      <div class="requestCard" id="codeFound" hidden>
+        <div class="row rowNoWrap">
+          <div class="avatar"><p class="avatarText" id="foundInitial">이</p></div>
+          <div class="personMain"><p class="personName" id="foundName">이서연</p><p class="muted" id="foundCode">VLM-3M8R-41ZP</p></div>
+        </div>
+        <button class="button" id="codeSend"><span class="buttonText" id="codeSendText">친구 요청 보내기</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 링크로 열었을 때: 링크를 보낸 사람의 요청을 받는 화면 -->
+  <div class="sheet" id="inviteSheet" role="dialog" aria-modal="true" aria-label="친구 요청" hidden>
+    <div class="sheetHead">
+      <h2 class="sheetTitle">친구 요청</h2>
+      <button class="sheetClose" data-close-layer aria-label="닫기"><span class="sheetCloseText">닫기</span></button>
+    </div>
+    <div class="requestCard">
+      <div class="row rowNoWrap">
+        <div class="avatar"><p class="avatarText" id="inviteInitial">이</p></div>
+        <div class="personMain"><p class="personName" id="inviteName">이서연님</p><p class="muted">초대 링크로 연결을 요청했어요.</p></div>
+      </div>
+    </div>
+    <button class="button" id="inviteAccept"><span class="buttonText">수락</span></button>
+    <button class="secondary" data-close-layer><span class="secondaryText">나중에</span></button>
+  </div>
+
+  <!-- 사람 설정: 변경은 바로 저장된다 -->
+  <div class="sheet sheetTall" id="personSheet" role="dialog" aria-modal="true" aria-label="사람 설정" hidden>
+    <div class="sheetHead">
+      <h2 class="sheetTitle" id="personTitle">어머니</h2>
+      <button class="sheetClose" data-close-layer aria-label="닫기"><span class="sheetCloseText">닫기</span></button>
+    </div>
+    <div class="field">
+      <p class="fieldLabel">부르는 이름</p>
+      <input class="input" id="personName" maxlength="20" aria-label="부르는 이름">
+    </div>
+    <div class="sheetBlock">
+      <p class="fieldLabel">관계</p>
+      <div class="segment" role="group" aria-label="관계">
+        <button class="segmentButton" data-relation="FAMILY" aria-pressed="true"><span class="segmentText">가족</span></button>
+        <button class="segmentButton" data-relation="FRIEND" aria-pressed="false"><span class="segmentText">친구</span></button>
+      </div>
+    </div>
+    <div class="sheetBlock">
+      <p class="fieldLabel">이 사람이 보낸 일정은</p>
+      <div class="segment" role="group" aria-label="받은 일정 처리">
+        <button class="segmentButton" data-receive="ASK" aria-pressed="true"><span class="segmentText">매번 확인</span></button>
+        <button class="segmentButton" data-receive="AUTO_ACCEPT" aria-pressed="false"><span class="segmentText">항상 수락</span></button>
+        <button class="segmentButton" data-receive="AUTO_REJECT" aria-pressed="false"><span class="segmentText">항상 거부</span></button>
+      </div>
+      <p class="muted" id="receiveHint"></p>
+    </div>
+    <div class="sheetBlock">
+      <p class="fieldLabel">이 사람에게 일정을 보낼 때 기본 알림</p>
+      <div class="pillRow" id="personReminders"></div>
+      <p class="muted">상대 캘린더에 들어간 일정이 이 시각에 상대에게 알림으로 가요. 보낼 때마다 바꿀 수 있어요.</p>
+    </div>
+    <button class="button" id="personSend"><span class="buttonText">일정 보내기</span></button>
+    <div class="row linkRow">
+      <button class="linkButton" id="personRemove"><span class="dangerLinkText" id="personRemoveText">연결 끊기</span></button>
+      <button class="linkButton" id="personBlock"><span class="dangerLinkText" id="personBlockText">차단</span></button>
+    </div>
+  </div>
+
+  <!-- 일정 보내기 -->
+  <div class="sheet sheetTall" id="sendSheet" role="dialog" aria-modal="true" aria-label="일정 보내기" hidden>
+    <div class="sheetHead">
+      <h2 class="sheetTitle">일정 보내기</h2>
+      <button class="sheetClose" data-close-layer aria-label="닫기"><span class="sheetCloseText">닫기</span></button>
+    </div>
+
+    <div class="sheetBlock stack18" id="sendForm">
+      <div class="sheetBlock">
+        <p class="fieldLabel">받는 사람</p>
+        <div class="pillRow" id="sendPeople"></div>
+      </div>
+      <div class="field">
+        <p class="fieldLabel">제목</p>
+        <input class="input" id="sendTitle" maxlength="100" placeholder="병원 예약" aria-label="제목">
+      </div>
+      <div class="row editRow">
+        <div class="field fieldGrow">
+          <p class="fieldLabel">날짜</p>
+          <input class="input" id="sendDate" maxlength="10" placeholder="2026-10-02" aria-label="날짜">
+        </div>
+        <div class="field fieldGrow">
+          <p class="fieldLabel">시간</p>
+          <input class="input" id="sendTime" maxlength="5" placeholder="15:00" aria-label="시간">
+        </div>
+      </div>
+      <div class="sheetBlock">
+        <p class="fieldLabel">알림 시각 (여러 개 고를 수 있어요)</p>
+        <div class="pillRow" id="sendReminders"></div>
+      </div>
+      <p class="error" id="sendError" role="alert" hidden></p>
+      <button class="button" id="sendGo"><span class="buttonText">보내기</span></button>
+    </div>
+
+    <div class="sheetBlock" id="sendResult" hidden>
+      <p class="muted">보낸 결과예요. 받는 사람이 정한 방식에 따라 달라요.</p>
+      <div id="sendResultList"></div>
+      <button class="button" data-close-layer><span class="buttonText">확인</span></button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
